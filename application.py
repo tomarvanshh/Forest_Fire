@@ -3,13 +3,22 @@ from flask import Flask,request,jsonify,render_template
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
+import os
 
 application = Flask(__name__)
 app = application
 
+
+# current path of this script
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+# 2. Join the base path with your model paths
+ridge_model_path = os.path.join(basedir, 'models', 'ridgecv.pkl')
+scaler_path = os.path.join(basedir, 'models', 'scaler.pkl')
+
 ## import ridge and standardscaler pickel files
-ridge_model = pickle.load(open('models/ridgecv.pkl','rb'))
-scaler = pickle.load(open('models/scaler.pkl','rb'))
+ridge_model = pickle.load(open(ridge_model_path,'rb'))
+scaler = pickle.load(open(scaler_path,'rb'))
 
 @app.route('/')
 def index():
@@ -36,4 +45,4 @@ def predict_datapoint():
         return render_template('home.html')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0',port=8000)
